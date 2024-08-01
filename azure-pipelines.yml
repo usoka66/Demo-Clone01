@@ -1,0 +1,23 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UseNode@2
+  inputs:
+    versionSpec: '14.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'Build project'
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'f6b78aa3-81a5-4f29-81fd-85a2863b159b'
+    appName: 'demo-appmoriy'
+    package: '$(System.DefaultWorkingDirectory)/build'
+  displayName: 'Deploy to Azure Web App'
